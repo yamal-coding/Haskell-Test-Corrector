@@ -1,0 +1,98 @@
+PRACTICA DE PROGRAMACION DECLARATIVA 2015/2016
+
+Ejecucion de ejemplo:
+
+Para cargar el test en el programa tenemos que declarar antes una instancia de Test del siguiente modo en el intérprete::
+
+	> let testPrueba = Test [Pregunta 1 3 1, Pregunta 1 3 2, Pregunta 1 3 3, Pregunta 1 3 1] [[0, 2, 3, 1], [0, 1, 2, 3]]
+
+	Esto es lo mismo que un test con una lista de preguntas:
+		Pregunta 0: valor 1, alternativas 3, respuesta correcta 1
+		Pregunta 1: valor 1, alternativas 3, respuesta correcta 2
+		Pregunta 2: valor 1, alternativas 3, respuesta correcta 3
+		Pregunta 3: valor 1, alternativas 3, respuesta correcta 1
+	Y dos modelos de test con el siguiente orden de preguntas:
+		Modelo 0
+			Pregunta 0
+			Pregunta 2
+			Pregunta 3
+			Pregunta 1
+		Modelo 1
+			Pregunta 0
+			Pregunta 1
+			Pregunta 2
+			Pregunta 3
+
+Para cargar respuestas de alumnos lo hacemos del mismo modo pero declarando instancias de RespuestaTest:
+
+	> let respuestas1 = RespuestaTest "juan" 1 [1, 2, 3, 2]
+	> let respuestas2 = RespuestaTest "pepe" 0 [0, 0, 0, 2]
+	> let respuestas3 = RespuestaTest "marta" 1 [1, 2, 3, 0]
+
+	Esto es lo mismo que:
+		Juan:
+			Modelo: 1
+			Pregunta 0: opcion 1
+			Pregunta 1: opcion 2
+			Pregunta 2: opcion 3
+			Pregunta 3: opcion 2
+		Pepe:
+			Modelo: 0
+			Pregunta 0: opcion en blanco
+			Pregunta 2: opcion en blanco
+			Pregunta 3: opcion en blanco
+			Pregunta 1: opcion 2
+		Marta::
+			Modelo: 1
+			Pregunta 0: opcion 1
+			Pregunta 1: opcion 2
+			Pregunta 2: opcion 3
+			Pregunta 3: opcion en blanco
+
+Para corregir una respuesta al test llamamos a la funcion corrige con un test y una respuesta:
+
+	> corrige testPrueba respuestas1
+
+	Salida: Correccion "juan" 2.5 6.25 [(0,Correcta),(1,Correcta),(2,Correcta),(3,Erronea)]
+
+	(Tenemos una instancia de Correccion con la nota media del alumno sobre 10 y no sobre 10 y el éxito que tuvo en cada respuesta)
+
+	También podemos usar la funcion de IO para ver las notas de la correción con un formato mas cómodo:
+
+	> muestraCorreccion (corrige testPrueba respuestas1)
+
+	Salida:
+		Correccion:
+		Alumno: "juan"
+		Nota test: 2.5
+		Nota sobre 10: 6.25
+
+Para realizar las estadísticas y poder verlas en un formato legible llamamos a muestraEstadisticas tras llamar a estadísticas:
+
+	>muestraEstadisticas (estadisticas testPrueba [respuestas1, respuestas2, respuestas3]) 
+
+	Salida:
+		Estadisticas: 
+		Nota media: 5.4166665
+		Media de respuestas respondidas: 2.6666667
+		Numero de suspensos (nota < 5): 1
+		Numero de aprobados (5 <= nota < 7): 1
+		Numero de notables (7 <= nota < 9): 1
+		Numero de sobresalientes (9 <= nota): 0
+		Frecuencia absolutas y relativas de aciertos, fallos y blancos  para cada pregunta: 
+		recuencia asboluta de aciertos:
+		2   3   2   0   
+		Frecuencia relativa de aciertos: 
+		0.2857143   0.42857143   0.2857143   0.0   
+		Frecuencia absoluta de fallos:
+		0   0   0   1   
+		Frecuencia relativa de fallos:
+		0.0   0.0   0.0   1.0   
+		Frecuencia absoluta de respuestas en blanco:
+		1   0   1   2   
+		Frecuencia relativa de respuestas en blanco:
+		0.25   0.0   0.25   0.5   
+		Pregunta con mejores resultados: 2
+		Pregunta con peores resultados: 4
+		Pregunta más veces dejada en blanco: 4
+		Pregunta menos veces dejada en blanco: 2
